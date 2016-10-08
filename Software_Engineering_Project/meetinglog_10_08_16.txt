@@ -1,0 +1,80 @@
+**Individual Group Meeting Log 10/08/2016 :: 1:00-3:30**
+
+Involving Richard Hamm and Zach Sirotto in regards to developing the database for iteration 1.
+
+***
+
+Pair-Programming 10/08/2016 1:00-3:30 (Richard and Zach)
+
+Zach typed the queries and the database schema, with Richard assisting and committing code to the DB.
+
+***
+
+**Completed Tasks on 10/08/2016:**
+
+     * Created stored procedure for:
+          Querying events in a given location.
+
+     * We established the standard for latitude and longitude to be a decimal precision of 4 decimal places.
+     * We ran into some mechanical problems when coming up with the stored procedure for querying events.
+     * Trouble presented itself because upon contemplating the structure of the stored procedure, we realized
+       that longitudes are negative until hitting the 180 marker, which they then turn positive.
+     * Similarly, the latitudes shift from positive to negatives when they hit the equator (which is 0 latitude).
+     * Due to this, we devised a graphical representation of our problem and intuitively came up with a heuristic
+       that accounts for the changes in latitudes and longitudes.
+     * We ran some manual tests on the stored procedure, and now we just need to implement automated unit testing
+       in order to exhaust testing different possible positions on the map.
+     * Now that this stored procedure is taken care of, the middle-tier will be able to develop a means of
+       accessing this stored procedure and communicating the events back to the front-end.
+     * All non-finalized source code will be committed to the Database_dev_branch, and upon finalization will be
+       committed to the master.
+          
+
+
+     Performed tests on store procedures to ensure proper functionality.
+
+**Stored procedures and create table statements have been committed to the 'Source Code/Database' directory in GIT master branch:**
+[https://github.com/PinGTeam/PinG/tree/master/Source-Code/Database/Iteration1](https://github.com/PinGTeam/PinG/tree/master/Source-Code/Database/Iteration1)
+
+***
+
+Instead of using the stored procedure we came up with from last meeting:
+[https://files.slack.com/files-tmb/T2CNU43KK-F2LF2MBRQ-1dc8435c8d/iteration_2_stored_procedure_for_fetching_coordinates_720.png](https://files.slack.com/files-tmb/T2CNU43KK-F2LF2MBRQ-1dc8435c8d/iteration_2_stored_procedure_for_fetching_coordinates_720.png)
+
+We derived an appropriate way to perform the stored procedure saved as the filename: GetEvents.sql where two coordinates' latitudes and longitudes are sent in as parameters for the query:
+[https://github.com/PinGTeam/PinG/tree/master/Source-Code/Database/Iteration1](https://github.com/PinGTeam/PinG/tree/master/Source-Code/Database/Iteration1)
+
+
+
+**Note for IOS and Android Programmers:**
+When a user logins in, the userID must be stored in a local variable to be used when querying the database (i.e., creating an event).
+
+***
+
+In conclusion:
+
+* Latitudes and longitudes will have a decimal precision of 4 places. i.e: '0.0000'.
+
+* The GetEvent stored procedure will return a list of events and their given latitude, longitude, eventID, firstname and lastname for the host of the event, and the time the event is hosted for.
+
+* On the second iteration, we could potentially allow additional logins such as to login with gmail or facebook.
+
+
+**The syntax for calling the stored procedures are as follows:**
+
+     CALL InsertUser(userName <string[25]>, firstName <string[25]>, lastName <string[25]>);
+       -> Returns UserID of user queried/inserted.
+       -> Won't insert if user already exists.
+
+     CALL InsertEvent(userID <int[25]>, EventName <string[255]>, Latitude <double>, Longitude <double>, Date/Time <year-month-day hour:min:second>, Description <string[1024]>);
+       -> Will throw error if procedure fails.
+
+     CALL GetEvents(topLatitude <double>, topLongitude <double>, bottomLatitude <double>, bottomLongitude <double>);
+       -> Will return a list of all events in given coordinate plane.
+
+Communication will especially be made between the back-end and middle tier programmers in order for us all to be on the same page to make the code compatible with one-another.
+
+***
+
+The sprint backlog will be updated to show the work done in this meeting.
+[https://github.com/PinGTeam/PinG/tree/master/backlogs](https://github.com/PinGTeam/PinG/tree/master/backlogs)
